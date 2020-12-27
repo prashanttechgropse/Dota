@@ -9,7 +9,6 @@ const getAllHeroes = async (id) => {
 
 const getData = async (id) => {
   const data = await getAllHeroes(id);
-  console.log(data);
   const { hero_id: firstHeroId } = await searchFirstHero(data);
   const { hero_id: secondHeroId } = await searchSecondHero(firstHeroId, data);
   const { hero_id: thirdHeroId } = await searchThirdHero(
@@ -17,8 +16,7 @@ const getData = async (id) => {
     secondHeroId,
     data
   );
-  console.log("the three top hero ids are");
-  console.log(firstHeroId, secondHeroId, thirdHeroId);
+  console.log("the details of three top hero ids are");
   const heroes = await getDetailsOfHeroes();
   let detailsOfTopThreeHeroes = [];
   await detailsOfTopThreeHeroes.push(
