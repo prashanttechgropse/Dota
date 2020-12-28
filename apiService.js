@@ -3,12 +3,9 @@ const axios = require("axios");
 const httpClient = axios.create();
 
 const errorCallBack = (error) => {
-  const expectedError =
-    error.response &&
-    error.response.status >= 400 &&
-    error.response.status < 500;
+  const expectedError = error.response;
   if (!expectedError) {
-    console.log("logging the error", error);
+    console.log("kindly enter a valid account id");
   }
   return Promise.reject(error);
 };

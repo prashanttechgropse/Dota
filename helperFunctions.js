@@ -1,34 +1,40 @@
 const apiService = require("./apiService");
 
 const getAllHeroes = async (id) => {
-  const { data } = await apiService.get(
+  const { data, error } = await apiService.get(
     `https://api.opendota.com/api/players/${id}/heroes?is_radiant=1`
   );
-  return data;
+  if (data) return { data };
+  return error;
 };
 
 const getData = async (id) => {
-  const data = await getAllHeroes(id);
-  const { hero_id: firstHeroId } = await searchFirstHero(data);
-  const { hero_id: secondHeroId } = await searchSecondHero(firstHeroId, data);
-  const { hero_id: thirdHeroId } = await searchThirdHero(
-    firstHeroId,
-    secondHeroId,
-    data
-  );
-  console.log("the details of three top hero ids are");
-  const heroes = await getDetailsOfHeroes();
-  let detailsOfTopThreeHeroes = [];
-  await detailsOfTopThreeHeroes.push(
-    await extractDetailsOfAHero(firstHeroId, heroes)
-  );
-  await detailsOfTopThreeHeroes.push(
-    await extractDetailsOfAHero(secondHeroId, heroes)
-  );
-  await detailsOfTopThreeHeroes.push(
-    await extractDetailsOfAHero(thirdHeroId, heroes)
-  );
-  console.log(detailsOfTopThreeHeroes);
+  try {
+    const { data, error } = await getAllHeroes(id);
+    if (error) throw error;
+    const { hero_id: firstHeroId } = await searchFirstHero(data);
+    const { hero_id: secondHeroId } = await searchSecondHero(firstHeroId, data);
+    const { hero_id: thirdHeroId } = await searchThirdHero(
+      firstHeroId,
+      secondHeroId,
+      data
+    );
+    console.log("the details of three top hero ids are");
+    const heroes = await getDetailsOfHeroes();
+    let detailsOfTopThreeHeroes = [];
+    await detailsOfTopThreeHeroes.push(
+      await extractDetailsOfAHero(firstHeroId, heroes)
+    );
+    await detailsOfTopThreeHeroes.push(
+      await extractDetailsOfAHero(secondHeroId, heroes)
+    );
+    await detailsOfTopThreeHeroes.push(
+      await extractDetailsOfAHero(thirdHeroId, heroes)
+    );
+    console.log(detailsOfTopThreeHeroes);
+  } catch (error) {
+    console.log("Error:kindly enter a valid account id");
+  }
 };
 
 const searchFirstHero = async (data) => {
