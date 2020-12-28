@@ -40,7 +40,7 @@ const getData = async (id) => {
 const searchFirstHero = async (data) => {
   let first = { games: 0 };
   await data.map((hero) => {
-    if (hero.games > first.games) {
+    if (hero.games >= first.games) {
       first = hero;
     }
   });
@@ -50,7 +50,7 @@ const searchFirstHero = async (data) => {
 const searchSecondHero = async (firstHeroId, data) => {
   let second = { games: 0 };
   await data.map((hero) => {
-    if (hero.games > second.games && hero.hero_id !== firstHeroId) {
+    if (hero.games >= second.games && hero.hero_id !== firstHeroId) {
       second = hero;
     }
   });
@@ -61,7 +61,7 @@ const searchThirdHero = async (firstHeroId, secondHeroId, data) => {
   let third = { games: 0 };
   await data.map((hero) => {
     if (
-      hero.games > third.games &&
+      hero.games >= third.games &&
       hero.hero_id !== firstHeroId &&
       hero.hero_id !== secondHeroId
     ) {
@@ -78,7 +78,11 @@ const getDetailsOfHeroes = async () => {
 
 const extractDetailsOfAHero = async (id, heroes) => {
   const heroDetails = await heroes.find((hero) => id == hero.id);
-  return heroDetails;
+  return {
+    hero_id: heroDetails.id,
+    name: heroDetails.name,
+    localized_name: heroDetails.localized_name,
+  };
 };
 
 module.exports = { getData };
